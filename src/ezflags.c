@@ -84,14 +84,17 @@ fill_flag (char *flag, int flag_size, char **args, flag_t flag_array[])
 
     flag_array[i].found = 1;
     int j = 0;
-    if (flag_array[i].params_count > 0)
+    if (flag_array[i].params_count != 0)
 	{
-	    while (args[j] && j < flag_array[i].params_count)
+	    while (args[j]
+	           && (flag_array[i].params_count == -1
+	               || j < flag_array[i].params_count))
 		{
 		    if (get_arg_type (args[j]) != ARGUMENT)
 			{
 			    break;
 			}
+
 		    str_array_append (args[j], &flag_array[i].params, j);
 		    ++j;
 		}
