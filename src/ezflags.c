@@ -1,5 +1,5 @@
 #include "ezflags.h"
-#include <stdio.h>
+#include "ezflags_internal.h"
 #include <stdlib.h>
 #include <string.h>
 

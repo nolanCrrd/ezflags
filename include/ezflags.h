@@ -2,10 +2,6 @@
 #define EZFLAGS_H
 
 /*========================
- * Defines
- * ======================== */
-
-/*========================
  * Typedef
  * ======================== */
 
@@ -21,32 +17,6 @@ typedef struct s_flag
     char **params;    /**< Array where store params of the option */
     char required;
 } flag_t;
-
-typedef enum e_arg_type
-{
-    SINGLE_CHAR_FLAG,
-    SINGLE_GROUP_FLAG,
-    STRING_FLAG,
-    ARGUMENT,
-    END_FLAG,
-} arg_type;
-
-typedef enum e_result_status
-{
-    NOT_A_FLAG,
-    FLAG_NOT_FOUND,
-    FLAG_ARGUMENT_NOT_FOUND,
-    SYSTEM_ERROR,
-    NO_MORE_FLAG,
-    ERROR,
-    SUCCESS,
-} result_status;
-
-typedef struct s_arg_result
-{
-    result_status status;
-    int information;
-} arg_result_t;
 
 /*========================
  * Public functions
@@ -65,10 +35,6 @@ typedef struct s_arg_result
  */
 int ezflags (char **args, flag_t flag_array[], char **still_argv[]);
 
-/*========================
- * Private functions
- * ======================== */
-void print_flag (flag_t flag);
-void print_ezflags_result (flag_t flags[], char **still_argv);
+// TODO: Make constructor helper
 
 #endif // EZFLAGS_H

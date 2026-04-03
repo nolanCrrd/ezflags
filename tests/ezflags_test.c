@@ -1,4 +1,5 @@
 #include "ezflags.h"
+#include "ezflags_internal.h"
 #include <stdio.h>
 #include <unistd.h>
 
@@ -7,42 +8,42 @@ main (void)
 {
     // print_test ();
 
-    const char *args[]
-        = { "-r", "-R", "1", "hello-world.txt", "c-aca.txt", 0 };
+    const char *args[] = { "--verbose", "--help", 0 };
 
     flag_t flags[] = { (flag_t){
 	                   .required = 0,
-	                   .params_count = 1,
+	                   .params_count = 0,
 	                   .name = "R",
 	                   .params = NULL,
 	               },
 	               (flag_t){
-	                   .required = 1,
-	                   .params_count = 0,
+	                   .required = 0,
+	                   .params_count = 1,
 	                   .name = "r",
+	                   .params = NULL,
+	               },
+
+	               (flag_t){
+	                   .required = 0,
+	                   .params_count = 0,
+	                   .name = "verbose",
+	                   .params = NULL,
+	               },
+
+	               (flag_t){
+	                   .required = 0,
+	                   .params_count = -1,
+	                   .name = "o",
 	                   .params = NULL,
 	               },
 	               { 0 } };
 
     char **still_argv = NULL;
 
-    ezflags ((char **)&args, (flag_t *)&flags, &still_argv);
-
-    for (int i = 0; flags[i].name; ++i)
+    if (ezflags ((char **)&args, (flag_t *)&flags, &still_argv))
 	{
-	    print_flag (flags[i]);
+	    printf ("Error\n");
 	}
-
-    printf ("[");
-    for (int i = 0; still_argv[i]; ++i)
-	{
-	    printf ("%s", still_argv[i]);
-	    if (still_argv[i + 1])
-		{
-		    printf (",");
-		}
-	}
-    printf ("]");
 
     return (0);
 }
