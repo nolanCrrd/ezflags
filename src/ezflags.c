@@ -57,17 +57,29 @@ str_array_append (char *str, char ***array_ptr, int array_size)
 }
 
 arg_result_t
-fill_flag (char *flag, char **args, flag_t flag_array[])
+fill_flag (char *flag, int flag_size, char **args, flag_t flag_array[])
 {
     int i = 0;
-    while (flag_array[i].name && strcmp (flag, flag_array[i].name) != 0)
+    if (flag_size == -1)
 	{
-	    ++i;
+	    while (flag_array[i].name
+	           && strcmp (flag, flag_array[i].name) != 0)
+		{
+		    ++i;
+		}
+	}
+    else
+	{
+	    while (flag_array[i].name
+	           && strncmp (flag, flag_array[i].name, 1) != 0)
+		{
+		    ++i;
+		}
 	}
     if (!flag_array[i].name)
 	{
 	    return (
-	        (arg_result_t){ .status = FLAG_NOT_FOUND, .information = 0 });
+	        (arg_result_t){ .status = FLAG_NOT_FOUND, .information = 1 });
 	}
 
     flag_array[i].found = 1;
@@ -110,17 +122,40 @@ parse_next_arg (char **args, flag_t flag_array[])
 	        (arg_result_t){ .status = NO_MORE_FLAG, .information = 0 });
 	}
 
-    char *flag;
+    arg_result_t fill_flag_result;
     if (type == STRING_FLAG)
 	{
-	    flag = args[0] + 2;
+	    fill_flag_result
+	        = fill_flag (args[0] + 2, -1, args + 1, flag_array);
 	}
     else
 	{
-	    flag = args[0] + 1;
-	}
+	    int to_skip = 0;
+	    int i = 0;
+	    while (args[0][i + 1])
+		{
+		    fill_flag_result
+		        = fill_flag (&args[0][i + 1], 1, args + 1, flag_array);
 
-    arg_result_t fill_flag_result = fill_flag (flag, args + 1, flag_array);
+		    if (fill_flag_result.status == SYSTEM_ERROR
+		        || fill_flag_result.status == FLAG_ARGUMENT_NOT_FOUND
+		        || (type == SINGLE_GROUP_FLAG
+		            && fill_flag_result.status == FLAG_NOT_FOUND)
+		        || (args[0][i + 2]
+		            && fill_flag_result.information > 1))
+			{
+			    return ((arg_result_t){
+			        .status = ERROR,
+			        .information = fill_flag_result.information });
+			}
+
+		    to_skip += fill_flag_result.information;
+
+		    ++i;
+		}
+	    return ((arg_result_t){ .status = fill_flag_result.status,
+	                            .information = to_skip });
+	}
 
     return (fill_flag_result);
 }
@@ -147,6 +182,13 @@ ezflags (char **args, flag_t flag_array[], char ***still_argv)
 	{
 	    arg_result_t arg_status = parse_next_arg (args, flag_array);
 
+	    if (arg_status.status == ERROR || arg_status.status == SYSTEM_ERROR
+	        || (get_arg_type (args[0]) == SINGLE_GROUP_FLAG
+	            && arg_status.status == FLAG_NOT_FOUND))
+		{
+		    return (1);
+		}
+
 	    if (arg_status.status == FLAG_NOT_FOUND
 	        || arg_status.status == NOT_A_FLAG)
 		{
@@ -157,11 +199,6 @@ ezflags (char **args, flag_t flag_array[], char ***still_argv)
 			}
 		    args = &args[1];
 		    still_args_found += 1;
-		}
-	    else if (arg_status.status == SYSTEM_ERROR
-	             || arg_status.status == FLAG_ARGUMENT_NOT_FOUND)
-		{
-		    return (1);
 		}
 	    else if (arg_status.status == NO_MORE_FLAG)
 		{

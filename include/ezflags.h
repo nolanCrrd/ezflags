@@ -38,6 +38,7 @@ typedef enum e_result_status
     FLAG_ARGUMENT_NOT_FOUND,
     SYSTEM_ERROR,
     NO_MORE_FLAG,
+    ERROR,
     SUCCESS,
 } result_status;
 
