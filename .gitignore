@@ -1,6 +1,7 @@
 # Additional
 compile_flags.txt
 .build
+.clang-format
 
 # Prerequisites
 *.d
