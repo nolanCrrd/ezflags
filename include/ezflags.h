@@ -69,5 +69,6 @@ int ezflags (char **args, flag_t flag_array[], char **still_argv[]);
  * Private functions
  * ======================== */
 void print_flag (flag_t flag);
+void print_ezflags_result (flag_t flags[], char **still_argv);
 
 #endif // EZFLAGS_H
