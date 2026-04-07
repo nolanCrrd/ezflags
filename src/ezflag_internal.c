@@ -104,7 +104,7 @@ int
 fill_spaced_arg (flag_t *flag, char **args, int size)
 {
     int j = 0;
-    while (args[j] && (flag->max_params == -1 || size + j < flag->max_params))
+    while (args[j] && (flag->max_args == -1 || size + j < flag->max_args))
 	{
 	    // if other args are a flag then stop
 	    if (get_arg_type (args[j]) != ARGUMENT)
@@ -112,7 +112,7 @@ fill_spaced_arg (flag_t *flag, char **args, int size)
 		    break;
 		}
 
-	    str_array_append (args[j], &flag->params, size + j);
+	    str_array_append (args[j], &flag->args, size + j);
 	    ++j;
 	}
     return (size + j);
@@ -127,7 +127,7 @@ fill_glued_arg (flag_t *flag, arg_type flag_type, char *flag_str,
 	    if (equal_position > 0)
 		{
 		    char *arg = &flag_str[equal_position];
-		    str_array_append (arg, &flag->params, 0);
+		    str_array_append (arg, &flag->args, 0);
 		    return (0);
 		}
 	}
@@ -136,7 +136,7 @@ fill_glued_arg (flag_t *flag, arg_type flag_type, char *flag_str,
 	    char *arg = &flag_str[1];
 	    if (arg[0])
 		{
-		    str_array_append (arg, &flag->params, 0);
+		    str_array_append (arg, &flag->args, 0);
 		    return (0);
 		}
 	}
@@ -152,7 +152,7 @@ fill_flag_args (flag_t *flag, char *flag_str, arg_type flag_type,
 	{
 	    filled_args = fill_glued_arg (flag, flag_type, flag_str,
 	                                  equal_position + 1);
-	    if (filled_args + 1 < flag->max_params || flag->max_params == -1)
+	    if (filled_args + 1 < flag->max_args || flag->max_args == -1)
 		{
 		    int tmp = filled_args + 1;
 		    filled_args = fill_spaced_arg (flag, args, tmp);
@@ -217,14 +217,14 @@ fill_flag (char *flag, arg_type flag_type, char **args, flag_t flag_array[])
 		}
 	}
 
-    if (filled_args < flag_array[index].min_params)
+    if (filled_args < flag_array[index].min_args)
 	{
 	    return ((arg_result_t){ .status = FLAG_ARGUMENT_NOT_FOUND,
 	                            .information = filled_args });
 	}
 
     if (flag_type == SHORT_FLAG_GROUP && flag_array[index].glued_arg == false
-        && (flag_array[index].min_params > 0 || filled_args > 0))
+        && (flag_array[index].min_args > 0 || filled_args > 0))
 	{
 	    return ((arg_result_t){ .status = FLAG_GROUP_INVALID_ARGUMENT,
 	                            .information = filled_args });
@@ -321,7 +321,8 @@ is_important_error (ezflag_status status)
 	                                      CANNOT_BE_GLUED,
 	                                      FLAG_GROUP_INVALID_ARGUMENT,
 	                                      FLAG_ARGUMENT_NOT_FOUND,
-	                                      FLAG_GROUP_NOT_FOUND };
+	                                      FLAG_GROUP_NOT_FOUND,
+	                                      IMPOSSIBLE_FLAG };
     for (int i = 0; i < 7; ++i)
 	{
 	    if (status == important_error[i])

@@ -1,5 +1,4 @@
 #include "ezflags.h"
-#include "ezflags_internal.h"
 #include <stdio.h>
 #include <unistd.h>
 
@@ -14,9 +13,9 @@ main (int argc, char **argv)
 	    .short_name = "v",
 	    .long_name = "verbose",
 	    .required = false,
-	    .min_params = 0,
-	    .max_params = 0,
-	    .params = NULL,
+	    .min_args = 0,
+	    .max_args = 0,
+	    .args = NULL,
 	},
 
 	// 2. Obligatoire avec exactement 1 argument (--output file.txt)
@@ -24,9 +23,9 @@ main (int argc, char **argv)
 	    .short_name = "o",
 	    .long_name = "output",
 	    .required = true,
-	    .min_params = 1,
-	    .max_params = 1,
-	    .params = NULL,
+	    .min_args = 1,
+	    .max_args = 1,
+	    .args = NULL,
 	},
 
 	// 3. Glued possible (-p8080 ou --port=8080)
@@ -34,10 +33,10 @@ main (int argc, char **argv)
 	    .short_name = "p",
 	    .long_name = "port",
 	    .required = false,
-	    .min_params = 1,
-	    .max_params = 1,
+	    .min_args = 1,
+	    .max_args = 1,
 	    .glued_arg = true,
-	    .params = NULL,
+	    .args = NULL,
 	},
 
 	// 4. Multi-arguments infinis ET Glued (-fmain.c util.c ...)
@@ -47,10 +46,10 @@ main (int argc, char **argv)
 	    .short_name = "f",
 	    .long_name = "files",
 	    .required = false,
-	    .min_params = 1,
-	    .max_params = -1,
+	    .min_args = 1,
+	    .max_args = -1,
 	    .glued_arg = true,
-	    .params = NULL,
+	    .args = NULL,
 	},
 
 	// 5. Uniquement un Long Flag (pas de version courte possible)
@@ -58,9 +57,9 @@ main (int argc, char **argv)
 	    .short_name = NULL,
 	    .long_name = "license-key",
 	    .required = false,
-	    .min_params = 1,
-	    .max_params = 1,
-	    .params = NULL,
+	    .min_args = 1,
+	    .max_args = 1,
+	    .args = NULL,
 	},
 
 	// 6. Uniquement un Short Flag (pas de version longue)
@@ -68,9 +67,9 @@ main (int argc, char **argv)
 	    .short_name = "X",
 	    .long_name = NULL,
 	    .required = false,
-	    .min_params = 0,
-	    .max_params = 0,
-	    .params = NULL,
+	    .min_args = 0,
+	    .max_args = 0,
+	    .args = NULL,
 	},
 
 	// 7. Glued OBLIGATOIRE avec DEUX arguments (-c10 20)
@@ -79,10 +78,10 @@ main (int argc, char **argv)
 	    .short_name = "c",
 	    .long_name = "coord",
 	    .required = true,
-	    .min_params = 2,
-	    .max_params = 2,
+	    .min_args = 2,
+	    .max_args = 2,
 	    .glued_arg = true,
-	    .params = NULL,
+	    .args = NULL,
 	},
 
 	// 8. Optionnel gourmand ET Glued (1 à 3 arguments)
@@ -91,10 +90,10 @@ main (int argc, char **argv)
 	    .short_name = "s",
 	    .long_name = "sizes",
 	    .required = false,
-	    .min_params = 1,
-	    .max_params = 3,
+	    .min_args = 1,
+	    .max_args = 3,
 	    .glued_arg = true,
-	    .params = NULL,
+	    .args = NULL,
 	},
 
 	// 9. Le flag de récursion (Switch classique)
@@ -102,20 +101,20 @@ main (int argc, char **argv)
 	    .short_name = "R",
 	    .long_name = "Recursive",
 	    .required = false,
-	    .min_params = 0,
-	    .max_params = 0,
-	    .params = NULL,
+	    .min_args = 0,
+	    .max_args = 0,
+	    .args = NULL,
 	},
 
-	// 10. Test de Glued Multi-Params "Lourd" (-rgb255 128 64)
+	// 10. Test de Glued Multi-args "Lourd" (-rgb255 128 64)
 	{
 	    .short_name = "rgb",
 	    .long_name = "color",
 	    .required = false,
-	    .min_params = 3,
-	    .max_params = 3,
+	    .min_args = 3,
+	    .max_args = 3,
 	    .glued_arg = true,
-	    .params = NULL,
+	    .args = NULL,
 	},
 
 	{ 0 } // Sentinelle

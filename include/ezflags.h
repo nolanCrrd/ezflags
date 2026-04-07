@@ -12,9 +12,9 @@ typedef struct s_flag
     char *short_name;
     char *long_name;
 
-    int min_params;
-    int max_params;
-    char **params;
+    int min_args;
+    int max_args;
+    char **args;
 
     bool glued_arg;
     bool required;
