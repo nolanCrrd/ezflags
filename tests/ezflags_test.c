@@ -1,5 +1,6 @@
 #include "ezflags.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
 int
@@ -128,6 +129,16 @@ main (int argc, char **argv)
 	}
 
     print_ezflags_result (flags, still_argv);
+
+    if (still_argv)
+	{
+	    free (still_argv);
+	}
+
+    for (int i = 0; flags[i].short_name || flags[i].long_name; ++i)
+	{
+	    free (flags[i].args);
+	}
 
     return (0);
 }
