@@ -21,6 +21,28 @@ typedef struct s_flag
     bool found;
 } flag_t;
 
+typedef enum e_status
+{
+    SUCCESS,
+
+    // internal
+    NOT_A_FLAG,
+    NO_MORE_FLAG,
+
+    // returnable
+    MISSING_FLAG,
+    FLAG_NOT_FOUND,
+    FLAG_GROUP_NOT_FOUND,
+    FLAG_GROUP_INVALID_ARGUMENT,
+    REPTITIVE_FLAG,
+    FLAG_ARGUMENT_NOT_FOUND,
+    CANNOT_BE_GLUED,
+    IMPOSSIBLE_FLAG,
+    SYSTEM_ERROR,
+    ERROR,
+
+} ezflag_status;
+
 /*========================
  * Public functions
  * ======================== */
@@ -36,7 +58,7 @@ typedef struct s_flag
  * @return -1 in error case | number of flags not found | or 0 in total
  * success
  */
-int ezflags (char **args, flag_t flag_array[], char **still_argv[]);
+ezflag_status ezflags (char **args, flag_t flag_array[], char **still_argv[]);
 
 // TODO: Make constructor helper
 

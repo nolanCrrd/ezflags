@@ -12,6 +12,7 @@ print_flag (flag_t flag)
 
     printf ("\tmin_params: %i\n", flag.min_params);
     printf ("\tmax_params: %i\n", flag.max_params);
+    printf ("\tglued_param: %i\n", flag.glued_arg);
 
     if (flag.params)
 	{

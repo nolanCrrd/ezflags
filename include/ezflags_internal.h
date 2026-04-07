@@ -12,22 +12,9 @@ typedef enum e_arg_type
     END_FLAG,
 } arg_type;
 
-typedef enum e_result_status
-{
-    NOT_A_FLAG,
-    FLAG_NOT_FOUND,
-    REPTITIVE_FLAG,
-    FLAG_ARGUMENT_NOT_FOUND,
-    SYSTEM_ERROR,
-    NO_MORE_FLAG,
-    CANNOT_BE_GLUED,
-    ERROR,
-    SUCCESS,
-} result_status;
-
 typedef struct s_arg_result
 {
-    result_status status;
+    ezflag_status status;
     int information;
 } arg_result_t;
 
