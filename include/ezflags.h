@@ -7,19 +7,18 @@
  * Typedef
  * ======================== */
 
-/**
- * @brief Type that store the found result of an option of a command line
- */
 typedef struct s_flag
 {
-    char *short_name; /**< Nom du flag (-v -> "v",  --verbose -> "verbose") */
+    char *short_name;
     char *long_name;
-    bool found;     /**< Adress where store found status */
-    int min_params; /**< Number of parameter that option can have (-1 if
-                         until another param) */
+
+    int min_params;
     int max_params;
-    char **params; /**< Array where store params of the option */
-    char required;
+    char **params;
+
+    bool glued_arg;
+    bool required;
+    bool found;
 } flag_t;
 
 /*========================

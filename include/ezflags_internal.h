@@ -16,9 +16,11 @@ typedef enum e_result_status
 {
     NOT_A_FLAG,
     FLAG_NOT_FOUND,
+    REPTITIVE_FLAG,
     FLAG_ARGUMENT_NOT_FOUND,
     SYSTEM_ERROR,
     NO_MORE_FLAG,
+    CANNOT_BE_GLUED,
     ERROR,
     SUCCESS,
 } result_status;

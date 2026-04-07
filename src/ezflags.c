@@ -1,5 +1,7 @@
 #include "ezflags.h"
 #include "ezflags_internal.h"
+#include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <strings.h>
@@ -71,7 +73,8 @@ str_array_append (char *str, char ***array_ptr, int array_size)
  * @return index where the flag was found / -1 if not found
  */
 int
-get_flag_index (char *flag, arg_type flag_type, flag_t flag_array[])
+get_flag_index (char *flag, arg_type flag_type, flag_t flag_array[],
+                int equal_position)
 {
     if (flag_type == SHORT_FLAG || flag_type == SHORT_FLAG_GROUP)
 	{
@@ -90,10 +93,20 @@ get_flag_index (char *flag, arg_type flag_type, flag_t flag_array[])
 	    for (int i = 0;
 	         flag_array[i].short_name || flag_array[i].long_name; ++i)
 		{
-		    if (flag_array[i].long_name
-		        && strcmp (flag, flag_array[i].long_name) == 0)
+		    if (flag_array[i].long_name)
 			{
-			    return (i);
+			    if (equal_position != -1
+			        && strncmp (flag, flag_array[i].long_name,
+			                    equal_position)
+			               == 0)
+				{
+				    return (i);
+				}
+			    else if (strcmp (flag, flag_array[i].long_name)
+			             == 0)
+				{
+				    return (i);
+				}
 			}
 		}
 	}
@@ -126,19 +139,79 @@ fill_spaced_arg (flag_t *flag, char **args)
     return (j);
 }
 
+int
+fill_glued_arg (flag_t *flag, arg_type flag_type, char *flag_str,
+                int equal_position)
+{
+    if (flag_type == LONG_FLAG)
+	{
+	    if (equal_position > 0)
+		{
+		    char *arg = &flag_str[equal_position];
+		    str_array_append (arg, &flag->params, 0);
+		    return (0);
+		}
+	}
+    else
+	{
+	    char *arg = &flag_str[1];
+	    if (arg[0])
+		{
+		    str_array_append (arg, &flag->params, 0);
+		    return (0);
+		}
+	}
+    return (-1);
+}
+
 arg_result_t
 fill_flag (char *flag, arg_type flag_type, char **args, flag_t flag_array[])
 {
-    int index = get_flag_index (flag, flag_type, flag_array);
+    char *equal = strchr (flag, '=');
+    int equal_position = -1;
+    if (equal != NULL)
+	{
+	    equal_position = equal - flag;
+	    if (equal_position == 0)
+		{
+		    return ((arg_result_t){ .status = FLAG_NOT_FOUND,
+		                            .information = 1 });
+		}
+	}
 
-    if (index == -1 || flag_array[index].found)
+    int index = get_flag_index (flag, flag_type, flag_array, equal_position);
+
+    if (index == -1)
 	{
 	    return (
 	        (arg_result_t){ .status = FLAG_NOT_FOUND, .information = 1 });
 	}
+    if (flag_array[index].found)
+	{
+	    return (
+	        (arg_result_t){ .status = REPTITIVE_FLAG, .information = 1 });
+	}
+    if (equal_position > 0 && flag_array[index].glued_arg == false)
+	{
+	    return (
+	        (arg_result_t){ .status = CANNOT_BE_GLUED, .information = 1 });
+	}
 
     flag_array[index].found = true;
-    int filled_args = fill_spaced_arg (&flag_array[index], args);
+    int filled_args = 0;
+    if (flag_array[index].glued_arg)
+	{
+	    filled_args = fill_glued_arg (&flag_array[index], flag_type, flag,
+	                                  equal_position + 1);
+	    if (filled_args == -1)
+		{
+		    filled_args = fill_spaced_arg (&flag_array[index], args);
+		}
+	}
+    else
+	{
+	    filled_args = fill_spaced_arg (&flag_array[index], args);
+	}
 
     if (filled_args < flag_array[index].min_params)
 	{
@@ -146,8 +219,7 @@ fill_flag (char *flag, arg_type flag_type, char **args, flag_t flag_array[])
 	                            .information = filled_args });
 	}
 
-    return (
-        (arg_result_t){ .status = SUCCESS, .information = filled_args + 1 });
+    return ((arg_result_t){ .status = SUCCESS, .information = filled_args });
 }
 
 arg_result_t
@@ -186,7 +258,7 @@ parse_next_arg (char **args, flag_t flag_array[])
 		        || (type == SHORT_FLAG_GROUP
 		            && fill_flag_result.status == FLAG_NOT_FOUND)
 		        || (args[0][i + 2]
-		            && fill_flag_result.information > 1))
+		            && fill_flag_result.information > 0))
 			{
 			    return ((arg_result_t){
 			        .status = ERROR,
@@ -227,6 +299,8 @@ ezflags (char **args, flag_t flag_array[], char ***still_argv)
 	    arg_result_t arg_status = parse_next_arg (args, flag_array);
 
 	    if (arg_status.status == ERROR || arg_status.status == SYSTEM_ERROR
+	        || arg_status.status == REPTITIVE_FLAG
+	        || arg_status.status == CANNOT_BE_GLUED
 	        || (get_arg_type (args[0]) == SHORT_FLAG_GROUP
 	            && arg_status.status == FLAG_NOT_FOUND))
 		{
@@ -262,7 +336,7 @@ ezflags (char **args, flag_t flag_array[], char ***still_argv)
 		}
 	    else
 		{
-		    args = &args[arg_status.information];
+		    args = &args[arg_status.information + 1];
 		}
 	}
 

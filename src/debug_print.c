@@ -8,6 +8,7 @@ print_flag (flag_t flag)
     printf ("\tlong_name: %s\n", flag.long_name);
 
     printf ("\tfound: %i\n", flag.found);
+    printf ("\trequired: %i\n", flag.required);
 
     printf ("\tmin_params: %i\n", flag.min_params);
     printf ("\tmax_params: %i\n", flag.max_params);
