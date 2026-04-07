@@ -26,8 +26,14 @@ typedef struct s_arg_result
  * Utils functions functions
  * ======================== */
 
-void print_flag (flag_t flag);
-void print_ezflags_result (flag_t flags[], char **still_argv);
+/**
+ * @brief Append a string to a given array (allocate the necessary space alone)
+ *
+ * @param str string to append
+ * @param array_ptr array where to append
+ * @param array_size current size of the array
+ * @return
+ */
 int str_array_append (char *str, char ***array_ptr, int array_size);
 
 /*========================
