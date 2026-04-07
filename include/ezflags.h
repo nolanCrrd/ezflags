@@ -60,6 +60,9 @@ typedef enum e_status
  */
 ezflag_status ezflags (char **args, flag_t flag_array[], char **still_argv[]);
 
+void print_flag (flag_t flag);
+void print_ezflags_result (flag_t flags[], char **still_argv);
+
 // TODO: Make constructor helper
 
 #endif // EZFLAGS_H
