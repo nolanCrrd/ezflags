@@ -15,10 +15,13 @@ typedef struct s_flag
     int min_args;
     int max_args;
     char **args;
+    char **args_help;
 
     bool glued_arg;
     bool required;
     bool found;
+
+    char *description;
 } flag_t;
 
 typedef enum e_status

@@ -36,6 +36,8 @@ typedef struct s_arg_result
  */
 int str_array_append (char *str, char ***array_ptr, int array_size);
 
+int get_longest_first_colums (flag_t flag_array[]);
+
 /*========================
  * Implementation functions
  * ======================== */

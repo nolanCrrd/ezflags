@@ -1,7 +1,14 @@
 #include "ezflags.h"
 #include "ezflags_internal.h"
 #include <stdbool.h>
+#include <stdio.h>
 #include <strings.h>
+
+void
+print_help (flag_t flag_array[])
+{
+    int size = get_longest_first_colums (flag_array);
+}
 
 ezflag_status
 ezflags (char **args, flag_t flag_array[], char ***still_argv)

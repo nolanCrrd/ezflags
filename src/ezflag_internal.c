@@ -332,3 +332,38 @@ is_important_error (ezflag_status status)
 	}
     return (0);
 }
+
+int
+get_longest_first_colums (flag_t flag_array[])
+{
+    int max_size = 0;
+    int size;
+
+    for (int i = 0; flag_array[i].short_name || flag_array[i].long_name; ++i)
+	{
+	    size = 0;
+
+	    if (flag_array[i].short_name)
+		{
+		    // counting "-v,"
+		    size += 3;
+		}
+	    if (flag_array[i].long_name)
+		{
+		    // counting " --verbose"
+		    size += 3 + strlen (flag_array[i].long_name);
+		}
+
+	    for (int j = 0; flag_array[i].args_help[j]; j++)
+		{
+		    // counting " <arg_type>" or " [arg_type]"
+		    size += 3 + strlen (flag_array[i].args_help[j]);
+		}
+
+	    if (size > max_size)
+		{
+		    max_size = size;
+		}
+	}
+    return (max_size);
+}
