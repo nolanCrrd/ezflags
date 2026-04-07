@@ -1,6 +1,8 @@
 #ifndef EZFLAGS_H
 #define EZFLAGS_H
 
+#include <stdbool.h>
+
 /*========================
  * Typedef
  * ======================== */
@@ -10,11 +12,12 @@
  */
 typedef struct s_flag
 {
-    char *name;       /**< Nom du flag (-v -> "v",  --verbose -> "verbose") */
-    char found;       /**< Adress where store found status */
-    int params_count; /**< Number of parameter that option can have (-1 if
+    char *name;     /**< Nom du flag (-v -> "v",  --verbose -> "verbose") */
+    bool found;     /**< Adress where store found status */
+    int min_params; /**< Number of parameter that option can have (-1 if
                          until another param) */
-    char **params;    /**< Array where store params of the option */
+    int max_params;
+    char **params; /**< Array where store params of the option */
     char required;
 } flag_t;
 

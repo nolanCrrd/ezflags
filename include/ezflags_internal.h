@@ -5,9 +5,9 @@
 
 typedef enum e_arg_type
 {
-    SINGLE_CHAR_FLAG,
-    SINGLE_GROUP_FLAG,
-    STRING_FLAG,
+    SHORT_FLAG,
+    SHORT_FLAG_GROUP,
+    LONG_FLAG,
     ARGUMENT,
     END_FLAG,
 } arg_type;

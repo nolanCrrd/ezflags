@@ -8,7 +8,8 @@ print_flag (flag_t flag)
 
     printf ("\tfound: %i\n", flag.found);
 
-    printf ("\tparams_count: %i\n", flag.params_count);
+    printf ("\tmin_params: %i\n", flag.min_params);
+    printf ("\tmax_params: %i\n", flag.max_params);
 
     if (flag.params)
 	{
