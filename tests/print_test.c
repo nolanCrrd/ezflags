@@ -6,7 +6,9 @@
 void
 print_flag_test ()
 {
-    flag_t flag = { .name = "r", .found = 0, .params_count = 1, NULL };
+    flag_t flag = {
+	.short_name = "r", .found = 0, .min_params = 1, .max_params = 1, NULL
+    };
 
     print_flag (flag);
 }
