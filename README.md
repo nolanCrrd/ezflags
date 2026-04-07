@@ -1,5 +1,5 @@
 # ezflags
-🚧 Simple C library to simplify argv parsing separating flags and args
+🚧 Simple C library to simplify argv parsing separating options and args
 
 > ⚠️ WIP
 ```
