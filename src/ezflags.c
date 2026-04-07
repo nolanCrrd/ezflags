@@ -2,6 +2,7 @@
 #include "ezflags_internal.h"
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 
 /**
  * @brief Return the type of the given argument of argv
@@ -74,10 +75,11 @@ get_flag_index (char *flag, arg_type flag_type, flag_t flag_array[])
 {
     if (flag_type == SHORT_FLAG || flag_type == SHORT_FLAG_GROUP)
 	{
-	    for (int i = 0; flag_array[i].name; ++i)
+	    for (int i = 0;
+	         flag_array[i].short_name || flag_array[i].long_name; ++i)
 		{
-		    // compare only one char of the flag group
-		    if (strncmp (flag, flag_array[i].name, 1) == 0)
+		    if (flag_array[i].short_name
+		        && strncmp (flag, flag_array[i].short_name, 1) == 0)
 			{
 			    return (i);
 			}
@@ -85,10 +87,11 @@ get_flag_index (char *flag, arg_type flag_type, flag_t flag_array[])
 	}
     else
 	{
-	    for (int i = 0; flag_array[i].name; ++i)
+	    for (int i = 0;
+	         flag_array[i].short_name || flag_array[i].long_name; ++i)
 		{
-		    // compare all the string -> long flag
-		    if (strcmp (flag, flag_array[i].name) == 0)
+		    if (flag_array[i].long_name
+		        && strcmp (flag, flag_array[i].long_name) == 0)
 			{
 			    return (i);
 			}
@@ -128,7 +131,7 @@ fill_flag (char *flag, arg_type flag_type, char **args, flag_t flag_array[])
 {
     int index = get_flag_index (flag, flag_type, flag_array);
 
-    if (index == -1)
+    if (index == -1 || flag_array[index].found)
 	{
 	    return (
 	        (arg_result_t){ .status = FLAG_NOT_FOUND, .information = 1 });
@@ -204,7 +207,7 @@ parse_next_arg (char **args, flag_t flag_array[])
 int
 check_all_required (flag_t flag_array[])
 {
-    for (int i = 0; flag_array[i].name; ++i)
+    for (int i = 0; flag_array[i].short_name; ++i)
 	{
 	    if (!flag_array[i].found && flag_array[i].required)
 		{

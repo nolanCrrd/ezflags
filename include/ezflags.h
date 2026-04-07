@@ -12,7 +12,8 @@
  */
 typedef struct s_flag
 {
-    char *name;     /**< Nom du flag (-v -> "v",  --verbose -> "verbose") */
+    char *short_name; /**< Nom du flag (-v -> "v",  --verbose -> "verbose") */
+    char *long_name;
     bool found;     /**< Adress where store found status */
     int min_params; /**< Number of parameter that option can have (-1 if
                          until another param) */

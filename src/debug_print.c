@@ -4,7 +4,8 @@
 void
 print_flag (flag_t flag)
 {
-    printf ("{\n \tname: %s\n", flag.name);
+    printf ("{\n \tshort_name: %s\n", flag.short_name);
+    printf ("\tlong_name: %s\n", flag.long_name);
 
     printf ("\tfound: %i\n", flag.found);
 
@@ -27,7 +28,7 @@ print_flag (flag_t flag)
 void
 print_ezflags_result (flag_t flags[], char **still_argv)
 {
-    for (int i = 0; flags[i].name; ++i)
+    for (int i = 0; flags[i].short_name || flags[i].long_name; ++i)
 	{
 	    print_flag (flags[i]);
 	}
