@@ -7,7 +7,6 @@ int
 main (int argc, char **argv)
 {
     (void)argc;
-    // print_test ();
 
     flag_t flags[] = {
 	// 1. Le switch classique (booléen) - Pas d'argument
