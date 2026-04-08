@@ -33,6 +33,7 @@ main (int argc, char **argv)
 	    .max_args = 1,
 	    .args = NULL,
 	    .description = "test description",
+	    .help_category = "Test",
 	},
 
 	// 3. Glued possible (-p8080 ou --port=8080)
@@ -45,6 +46,7 @@ main (int argc, char **argv)
 	    .glued_arg = true,
 	    .args = NULL,
 	    .description = "test description",
+	    .help_category = "TEST2",
 	},
 
 	// 4. Multi-arguments infinis ET Glued (-fmain.c util.c ...)
@@ -59,6 +61,7 @@ main (int argc, char **argv)
 	    .glued_arg = true,
 	    .args = NULL,
 	    .description = "test description",
+	    .help_category = "Other",
 	},
 
 	// 5. Uniquement un Long Flag (pas de version courte possible)

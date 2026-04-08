@@ -425,7 +425,9 @@ get_categories (flag_t flag_array[])
 	    int j = 0;
 	    while (categories[j])
 		{
-		    if (categories[j] == flag_array[i].help_category)
+		    if (flag_array[i].help_category
+		        && strcmp (categories[j], flag_array[i].help_category)
+		               == 0)
 			{
 			    break;
 			}
