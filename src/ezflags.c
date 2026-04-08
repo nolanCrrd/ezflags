@@ -2,56 +2,60 @@
 #include "ezflags_internal.h"
 #include <stdbool.h>
 #include <stdio.h>
+#include <string.h>
 #include <strings.h>
 
 void
 print_help (flag_t flag_array[])
 {
-    int size = get_longest_first_colums (flag_array);
+    int first_col_size = get_longest_first_colums (flag_array) + 2;
 
     for (int i = 0; flag_array[i].short_name || flag_array[i].long_name; ++i)
 	{
-	    int n = 0;
-	    char column[size];
+	    char column[first_col_size];
 
-	    if (flag_array[i].short_name)
-		{
-		    n += sprintf (column + n, "-%c,",
-		                  flag_array[i].short_name);
-		}
-	    else
-		{
-		    n += sprintf (column + n, "   ");
-		}
+	    fill_first_help_column (flag_array[i], column);
 
-	    if (flag_array[i].long_name)
-		{
-		    n += sprintf (column + n, " --%s",
-		                  flag_array[i].long_name);
-		}
+	    printf ("%-*s\t", first_col_size, column);
 
-	    if (flag_array[i].args_help)
+	    if (flag_array[i].description)
 		{
-		    for (int j = 0; flag_array[i].args_help[j]; ++j)
+		    int max_desc_width = MAX_WIDTH - first_col_size - 1;
+
+		    char *desc = flag_array[i].description;
+
+		    while (desc && *desc)
 			{
-			    if (j < flag_array[i].min_args)
+			    int len = strlen (desc);
+
+			    if (len < max_desc_width)
 				{
-				    n += sprintf (column + n, " <%s>",
-				                  flag_array[i].args_help[j]);
+				    printf ("%s\n", desc);
+				    break;
 				}
-			    else
+
+			    int break_at = max_desc_width;
+			    while (break_at > 0 && desc[break_at] != ' ')
 				{
-				    n += sprintf (column + n, " [%s]",
-				                  flag_array[i].args_help[j]);
+				    --break_at;
+				}
+
+			    if (break_at == 0)
+				{
+				    break_at = max_desc_width;
+				}
+
+			    printf ("%.*s\n", break_at, desc);
+
+			    printf ("%*s\t ", first_col_size, "");
+
+			    desc += break_at;
+			    while (desc[0] == ' ')
+				{
+				    desc += 1;
 				}
 			}
 		}
-
-	    column[n] = 0;
-
-	    printf ("%-*s\t%s\n", size + 2, column,
-	            flag_array[i].description ? flag_array[i].description
-	                                      : "");
 	}
 }
 

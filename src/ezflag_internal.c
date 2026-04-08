@@ -1,6 +1,7 @@
 #include "ezflags.h"
 #include "ezflags_internal.h"
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <strings.h>
@@ -369,4 +370,41 @@ get_longest_first_colums (flag_t flag_array[])
 		}
 	}
     return (max_size);
+}
+
+void
+fill_first_help_column (flag_t flag, char *buf)
+{
+    int n = 0;
+
+    if (flag.short_name)
+	{
+	    n += sprintf (buf + n, "-%c,", flag.short_name);
+	}
+    else
+	{
+	    n += sprintf (buf + n, "   ");
+	}
+
+    if (flag.long_name)
+	{
+	    n += sprintf (buf + n, " --%s", flag.long_name);
+	}
+
+    if (flag.args_help)
+	{
+	    for (int j = 0; flag.args_help[j]; ++j)
+		{
+		    if (j < flag.min_args)
+			{
+			    n += sprintf (buf + n, " <%s>", flag.args_help[j]);
+			}
+		    else
+			{
+			    n += sprintf (buf + n, " [%s]", flag.args_help[j]);
+			}
+		}
+	}
+
+    buf[n] = 0;
 }

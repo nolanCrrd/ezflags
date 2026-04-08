@@ -3,6 +3,8 @@
 
 #include "ezflags.h"
 
+#define MAX_WIDTH 80
+
 /*========================
  * Typedef
  * ======================== */
@@ -135,5 +137,7 @@ int check_all_required (flag_t flag_array[]);
  * @return 0 if not and 1 if yes
  */
 int is_important_error (ezflag_status status);
+
+void fill_first_help_column (flag_t flag, char *buf);
 
 #endif // EZFLAG_INTERNAL_H

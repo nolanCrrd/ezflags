@@ -18,7 +18,9 @@ main (int argc, char **argv)
 	    .min_args = 0,
 	    .max_args = 0,
 	    .args = NULL,
-	    .description = "test description",
+	    .description = "test descriptiontest descriptiontest "
+	                   "descriptiontest descriptiontest descriptiontest "
+	                   "descriptiontest description",
 	},
 
 	// 2. Obligatoire avec exactement 1 argument (--output file.txt)
