@@ -8,6 +8,51 @@ void
 print_help (flag_t flag_array[])
 {
     int size = get_longest_first_colums (flag_array);
+
+    for (int i = 0; flag_array[i].short_name || flag_array[i].long_name; ++i)
+	{
+	    int n = 0;
+	    char column[size];
+
+	    if (flag_array[i].short_name)
+		{
+		    n += sprintf (column + n, "-%c,",
+		                  flag_array[i].short_name);
+		}
+	    else
+		{
+		    n += sprintf (column + n, "   ");
+		}
+
+	    if (flag_array[i].long_name)
+		{
+		    n += sprintf (column + n, " --%s",
+		                  flag_array[i].long_name);
+		}
+
+	    if (flag_array[i].args_help)
+		{
+		    for (int j = 0; flag_array[i].args_help[j]; ++j)
+			{
+			    if (j < flag_array[i].min_args)
+				{
+				    n += sprintf (column + n, " <%s>",
+				                  flag_array[i].args_help[j]);
+				}
+			    else
+				{
+				    n += sprintf (column + n, " [%s]",
+				                  flag_array[i].args_help[j]);
+				}
+			}
+		}
+
+	    column[n] = 0;
+
+	    printf ("%-*s\t%s\n", size + 2, column,
+	            flag_array[i].description ? flag_array[i].description
+	                                      : "");
+	}
 }
 
 ezflag_status

@@ -4,25 +4,37 @@
 void
 print_flag (flag_t flag)
 {
-    printf ("{\n \tshort_name: %s\n", flag.short_name);
+    printf ("{\n \tshort_name: %c\n", flag.short_name);
     printf ("\tlong_name: %s\n", flag.long_name);
 
     printf ("\tfound: %i\n", flag.found);
     printf ("\trequired: %i\n", flag.required);
 
-    printf ("\tmin_params: %i\n", flag.min_params);
-    printf ("\tmax_params: %i\n", flag.max_params);
+    printf ("\tmin_args: %i\n", flag.min_args);
+    printf ("\tmax_args: %i\n", flag.max_args);
     printf ("\tglued_param: %i\n", flag.glued_arg);
 
-    if (flag.params)
+    if (flag.args)
 	{
-	    printf ("\tparams: [\n");
-	    for (int i = 0; flag.params[i]; ++i)
+	    printf ("\targs: [\n");
+	    for (int i = 0; flag.args[i]; ++i)
 		{
-		    printf ("\t\t%s,\n", flag.params[i]);
+		    printf ("\t\t%s,\n", flag.args[i]);
 		}
 	    printf ("\t]\n");
 	}
+
+    if (flag.args_help)
+	{
+	    printf ("\targs_help: [\n");
+	    for (int i = 0; flag.args_help[i]; ++i)
+		{
+		    printf ("\t\t%s,\n", flag.args_help[i]);
+		}
+	    printf ("\t]\n");
+	}
+
+    printf ("\tdescription: %s\n", flag.description);
 
     printf ("}\n");
 }

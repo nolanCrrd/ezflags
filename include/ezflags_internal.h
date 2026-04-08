@@ -13,6 +13,7 @@ typedef enum e_arg_type
     SHORT_FLAG_GROUP,
     LONG_FLAG,
     ARGUMENT,
+    HELP,
     END_FLAG,
 } arg_type;
 

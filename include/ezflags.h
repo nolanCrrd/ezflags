@@ -9,7 +9,7 @@
 
 typedef struct s_flag
 {
-    char *short_name;
+    char short_name;
     char *long_name;
 
     int min_args;
@@ -62,6 +62,8 @@ typedef enum e_status
  * success
  */
 ezflag_status ezflags (char **args, flag_t flag_array[], char **still_argv[]);
+
+void print_help (flag_t flag_array[]);
 
 void print_flag (flag_t flag);
 void print_ezflags_result (flag_t flags[], char **still_argv);
