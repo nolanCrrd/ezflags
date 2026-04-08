@@ -21,6 +21,7 @@ main (int argc, char **argv)
 	    .description = "test descriptiontest descriptiontest "
 	                   "descriptiontest descriptiontest descriptiontest "
 	                   "descriptiontest description",
+	    .help_category = "Test",
 	},
 
 	// 2. Obligatoire avec exactement 1 argument (--output file.txt)

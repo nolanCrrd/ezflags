@@ -35,6 +35,7 @@ print_flag (flag_t flag)
 	}
 
     printf ("\tdescription: %s\n", flag.description);
+    printf ("\thelp_category: %s\n", flag.help_category);
 
     printf ("}\n");
 }

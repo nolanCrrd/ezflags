@@ -22,6 +22,7 @@ typedef struct s_flag
     bool found;
 
     char *description;
+    char *help_category;
 } flag_t;
 
 typedef enum e_status

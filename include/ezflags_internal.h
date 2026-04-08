@@ -140,4 +140,6 @@ int is_important_error (ezflag_status status);
 
 void fill_first_help_column (flag_t flag, char *buf);
 
+char **get_categories (flag_t flag_array[]);
+
 #endif // EZFLAG_INTERNAL_H

@@ -9,50 +9,76 @@ void
 print_help (flag_t flag_array[])
 {
     int first_col_size = get_longest_first_colums (flag_array) + 2;
+    char **categories = get_categories (flag_array);
 
-    for (int i = 0; flag_array[i].short_name || flag_array[i].long_name; ++i)
+    for (int i = 0; categories[i]; ++i)
 	{
-	    char column[first_col_size];
-
-	    fill_first_help_column (flag_array[i], column);
-
-	    printf ("%-*s\t", first_col_size, column);
-
-	    if (flag_array[i].description)
+	    if (i != 0)
 		{
-		    int max_desc_width = MAX_WIDTH - first_col_size - 1;
+		    printf ("\n");
+		}
+	    printf ("%s\n", categories[i]);
 
-		    char *desc = flag_array[i].description;
-
-		    while (desc && *desc)
+	    for (int j = 0;
+	         flag_array[j].short_name || flag_array[j].long_name; ++j)
+		{
+		    if (flag_array[j].help_category == NULL
+		        && strcmp (categories[i], "Other") != 0)
 			{
-			    int len = strlen (desc);
+			    continue;
+			}
 
-			    if (len < max_desc_width)
+		    if ((flag_array[j].help_category == NULL
+		         && strcmp (categories[i], "Other") == 0)
+		        || strcmp (categories[i], flag_array[j].help_category)
+		               == 0)
+			{
+			    char column[first_col_size];
+
+			    fill_first_help_column (flag_array[j], column);
+
+			    printf (" %-*s\t", first_col_size, column);
+
+			    if (flag_array[j].description)
 				{
-				    printf ("%s\n", desc);
-				    break;
-				}
+				    int max_desc_width
+				        = MAX_WIDTH - first_col_size - 1;
 
-			    int break_at = max_desc_width;
-			    while (break_at > 0 && desc[break_at] != ' ')
-				{
-				    --break_at;
-				}
+				    char *desc = flag_array[j].description;
 
-			    if (break_at == 0)
-				{
-				    break_at = max_desc_width;
-				}
+				    while (desc && *desc)
+					{
+					    int len = strlen (desc);
 
-			    printf ("%.*s\n", break_at, desc);
+					    if (len < max_desc_width)
+						{
+						    printf ("%s\n", desc);
+						    break;
+						}
 
-			    printf ("%*s\t ", first_col_size, "");
+					    int break_at = max_desc_width;
+					    while (break_at > 0
+					           && desc[break_at] != ' ')
+						{
+						    --break_at;
+						}
 
-			    desc += break_at;
-			    while (desc[0] == ' ')
-				{
-				    desc += 1;
+					    if (break_at == 0)
+						{
+						    break_at = max_desc_width;
+						}
+
+					    printf ("%.*s\n", break_at, desc);
+
+					    printf ("%*s\t ", first_col_size,
+					            "");
+
+					    desc += break_at;
+					    while (desc[0] == ' ')
+						{
+						    desc += 1;
+						}
+					}
 				}
 			}
 		}

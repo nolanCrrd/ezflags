@@ -346,8 +346,8 @@ get_longest_first_colums (flag_t flag_array[])
 
 	    if (flag_array[i].short_name)
 		{
-		    // counting "-v,"
-		    size += 3;
+		    // counting " -v,"
+		    size += 4;
 		}
 	    if (flag_array[i].long_name)
 		{
@@ -407,4 +407,43 @@ fill_first_help_column (flag_t flag, char *buf)
 	}
 
     buf[n] = 0;
+}
+
+char **
+get_categories (flag_t flag_array[])
+{
+    char **categories;
+    int nb_cat = 1;
+
+    // init categories
+    categories = malloc (sizeof (char *) * 2);
+    categories[0] = "Other";
+    categories[1] = 0;
+
+    for (int i = 0; flag_array[i].short_name || flag_array[i].long_name; ++i)
+	{
+	    int j = 0;
+	    while (categories[j])
+		{
+		    if (categories[j] == flag_array[i].help_category)
+			{
+			    break;
+			}
+		    ++j;
+		}
+
+	    // Append help_category if not found
+	    if (categories[j] != NULL)
+		{
+		    continue;
+		}
+
+	    categories = realloc (categories, sizeof (char *) * (nb_cat + 2));
+
+	    categories[nb_cat] = flag_array[i].help_category;
+	    ++nb_cat;
+	    categories[nb_cat] = NULL;
+	}
+
+    return (categories);
 }
