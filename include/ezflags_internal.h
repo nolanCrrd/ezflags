@@ -142,8 +142,20 @@ int check_all_required (flag_t flag_array[]);
  */
 int is_important_error (ezflag_status status);
 
+/**
+ * @brief Fill the given buffer to match the --help syntax based on the flag
+ *
+ * @param flag reference flag the want to generate the help line
+ * @param buf buffer to write in (must be allocated)
+ */
 void fill_first_help_column (flag_t flag, char *buf);
 
+/**
+ * @brief Find all unique categories in the array
+ *
+ * @param flag_array flag where find categories
+ * @return allocated array
+ */
 char **get_categories (flag_t flag_array[]);
 
 #endif // EZFLAG_INTERNAL_H
