@@ -342,7 +342,7 @@ get_longest_first_colums (flag_t flag_array[])
 
     for (int i = 0; flag_array[i].short_name || flag_array[i].long_name; ++i)
 	{
-	    size = 0;
+	    size = 2;
 
 	    if (flag_array[i].short_name)
 		{
@@ -355,12 +355,12 @@ get_longest_first_colums (flag_t flag_array[])
 		    size += 3 + strlen (flag_array[i].long_name);
 		}
 
-	    if (flag_array[i].args_help)
+	    if (flag_array[i].help_args)
 		{
-		    for (int j = 0; flag_array[i].args_help[j]; j++)
+		    for (int j = 0; flag_array[i].help_args[j]; j++)
 			{
 			    // counting " <arg_type>" or " [arg_type]"
-			    size += 3 + strlen (flag_array[i].args_help[j]);
+			    size += 3 + strlen (flag_array[i].help_args[j]);
 			}
 		}
 
@@ -379,11 +379,11 @@ fill_first_help_column (flag_t flag, char *buf)
 
     if (flag.short_name)
 	{
-	    n += sprintf (buf + n, "-%c,", flag.short_name);
+	    n += sprintf (buf + n, " -%c,", flag.short_name);
 	}
     else
 	{
-	    n += sprintf (buf + n, "   ");
+	    n += sprintf (buf + n, "    ");
 	}
 
     if (flag.long_name)
@@ -391,17 +391,17 @@ fill_first_help_column (flag_t flag, char *buf)
 	    n += sprintf (buf + n, " --%s", flag.long_name);
 	}
 
-    if (flag.args_help)
+    if (flag.help_args)
 	{
-	    for (int j = 0; flag.args_help[j]; ++j)
+	    for (int j = 0; flag.help_args[j]; ++j)
 		{
 		    if (j < flag.min_args)
 			{
-			    n += sprintf (buf + n, " <%s>", flag.args_help[j]);
+			    n += sprintf (buf + n, " <%s>", flag.help_args[j]);
 			}
 		    else
 			{
-			    n += sprintf (buf + n, " [%s]", flag.args_help[j]);
+			    n += sprintf (buf + n, " [%s]", flag.help_args[j]);
 			}
 		}
 	}

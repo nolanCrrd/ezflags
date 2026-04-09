@@ -8,11 +8,13 @@
 void
 print_help (flag_t flag_array[])
 {
-    int first_col_size = get_longest_first_colums (flag_array) + 2;
+    int first_col_size = get_longest_first_colums (flag_array);
     char **categories = get_categories (flag_array);
 
+    // Print per category
     for (int i = 0; categories[i]; ++i)
 	{
+	    // Empty line if not first category (better lisibility)
 	    if (i != 0)
 		{
 		    printf ("\n");
@@ -22,6 +24,7 @@ print_help (flag_t flag_array[])
 	    for (int j = 0;
 	         flag_array[j].short_name || flag_array[j].long_name; ++j)
 		{
+		    // To avoid segfault need to treat NULL in another way
 		    if (flag_array[j].help_category == NULL
 		        && strcmp (categories[i], "Other") != 0)
 			{
@@ -37,7 +40,8 @@ print_help (flag_t flag_array[])
 
 			    fill_first_help_column (flag_array[j], column);
 
-			    printf (" %-*s\t", first_col_size, column);
+			    // Print first column
+			    printf ("%-*s\t", first_col_size, column);
 
 			    if (flag_array[j].description)
 				{
@@ -56,6 +60,8 @@ print_help (flag_t flag_array[])
 						    break;
 						}
 
+					    // Find the break point to match
+					    // max_width
 					    int break_at = max_desc_width;
 					    while (break_at > 0
 					           && desc[break_at] != ' ')
@@ -73,6 +79,7 @@ print_help (flag_t flag_array[])
 					    printf ("%*s\t ", first_col_size,
 					            "");
 
+					    // Skip whitespaces at beginning
 					    desc += break_at;
 					    while (desc[0] == ' ')
 						{

@@ -47,6 +47,7 @@ main (int argc, char **argv)
 	    .args = NULL,
 	    .description = "test description",
 	    .help_category = "TEST2",
+	    .help_args = (char *[]){ "NUMBER", NULL },
 	},
 
 	// 4. Multi-arguments infinis ET Glued (-fmain.c util.c ...)

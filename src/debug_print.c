@@ -24,12 +24,12 @@ print_flag (flag_t flag)
 	    printf ("\t]\n");
 	}
 
-    if (flag.args_help)
+    if (flag.help_args)
 	{
 	    printf ("\targs_help: [\n");
-	    for (int i = 0; flag.args_help[i]; ++i)
+	    for (int i = 0; flag.help_args[i]; ++i)
 		{
-		    printf ("\t\t%s,\n", flag.args_help[i]);
+		    printf ("\t\t%s,\n", flag.help_args[i]);
 		}
 	    printf ("\t]\n");
 	}
