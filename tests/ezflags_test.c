@@ -21,7 +21,7 @@ main (int argc, char **argv)
 	              "Test", NULL),
 
 	// 3. Glued possible 1 argument (OPT)
-	EZ_FLAG_OPT ('p', "port", "test description", "TEST2", false,
+	EZ_FLAG_OPT ('p', "port", false, "test description", "TEST2",
 	             "NUMBER"),
 
 	// 4. Multi-arguments infinis (FULL)
@@ -29,7 +29,7 @@ main (int argc, char **argv)
 	              "Other", NULL),
 
 	// 5. Uniquement Long Flag (OPT)
-	EZ_FLAG_OPT (0, "license-key", "test description", NULL, false, "KEY"),
+	EZ_FLAG_OPT (0, "license-key", false, "test description", NULL, "KEY"),
 
 	// 6. Uniquement Short Flag (BOOL)
 	EZ_FLAG_BOOL ('X', NULL, "test description", NULL),

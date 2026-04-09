@@ -4,9 +4,7 @@
 > ⚠️ WIP
 ```
 I just started the project so there may be some bugs and function that i've not implemented yet:
-- some helper function (to help build array / struct)
-- auto help string creation
-- some structure verification before parsing
+- May be some bug
 ```
 
 ## Overview
@@ -25,7 +23,7 @@ command --files=file1               # glued long flag
 command --files=file1 file2 file3   # glued arg list
 ```
 
-That can be annoying to parse all of this, so use ezflags.
+That can be annoying to parse all of this, so use ezflags to enjoy it.
 
 ## Usage
 ### Flag structure
@@ -42,6 +40,10 @@ typedef struct s_flag
     bool glued_arg;
     bool required;
     bool found;
+
+    char *description;
+    char *help_category;
+    char **help_args;
 } flag_t;
 ```
 This struct help you build a list of argument that your app will need. Here some explaination on each data:
@@ -53,6 +55,78 @@ This struct help you build a list of argument that your app will need. Here some
 - glued_arg: boolean to know if the first arg can be glued to the flag
 - required: boolean that tell if you want to get the error when not found (stop the execution here)
 - found: boolean that will be set to true if the arg is found
+- description: description of the given flag (not needed if you not use the print help function)
+- help_category: help you to organise --help by categories
+- help_args: help you to specify information about flag's args like `--color <NUMBER> <NUMBER> <NUMBER>` or `--size <NUMBER> [HEIGHT] [DEPTH]`
+
+### Helper macro
+It can be annoying to build the flag array from scratch by hand (it good to understand what you'r doing but in big project do not make this mistake). I created
+Macro to help you here is how to use it:
+
+#### EZ_HELP_ARGS(...)
+This help you to build the `help_args` array without aving a weird cast and it place the NULL end for you
+```c
+char *[] array = EZ_HELP_ARGS("NUMBER", "NUMBER");
+// array = (char *[]){"NUMBER", "NUMBER", NULL}
+```
+
+#### EZ_FLAG_BOOL
+The most used flag in cli application is just a boolean to tell to active one thing or not here how to simply build a flag
+like this:
+```c
+flag_t flag = EZ_FLAG_BOOL('v', "verbose", "some description", "VIEW");
+//Equivalent to:
+flag_t flag2 = {
+    .short_name = 'v',
+    .long_name = "verbose",
+    .description = "some description",
+    .min_args = 0,
+    .max_args = 0,
+    .help_args = NULL,
+    .help_category = "VIEW",
+    .glued_arg = false,
+    .required = false,
+};
+```
+If you will not use help function you can give NULL 3 and 4 arg
+
+#### EZ_FLAG_OPT
+The other case that you will have often is the case where you want to give an argument to your flag:
+```c
+flag_t = EZ_FLAG_OPT('v', "variant", false, NULL, NULL, "TEXT")
+// Equivalent to:
+flag_t flag2 = {
+    .short_name = 'v',
+    .long_name = "variant",
+    .description = NULL,
+    .min_args = 1,
+    .max_args = 1,
+    .help_args = EZ_HELP_ARGS("TEXT"),
+    .help_category = NULL,
+    .glued_arg = true,
+    .required = false,
+};
+```
+Note that glued is true by default to handle most of user action.
+
+#### EZ_FLAG_FULL
+This macro is for specific case to mke your parser act as you want:
+```c
+flag_t = EZ_FLAG_FULL('s', "size", 1, 3, true, true, NULL, NULL, false, EZ_HELP_ARGS("NUMBER", "NUMBER", "NUMBER"));
+// Equivalent to:
+flag_t flag2 = {
+    .short_name = 's',
+    .long_name = "size",
+    .min_args = 1,
+    .max_args = 3,
+    .required = true,
+    .glued_arg = true,
+    .description = NULL,
+    .help_category = NULL,
+    .help_args = EZ_HELP_ARGS("NUMBER", "NUMBER", "NUMBER"),
+};
+```
+Here you have to specify all aspect of the flag (often used is )
 
 ### Functions
 
@@ -74,32 +148,8 @@ main (int argc, char **argv)
     (void)argc;
 
     flag_t flags[] = {
-	{
-	    .short_name = "v",
-	    .long_name = "verbose",
-	    .required = false,
-	    .min_args = 0,
-	    .max_args = 0,
-	    .args = NULL,
-	},
-	{
-	    .short_name = "o",
-	    .long_name = "output",
-	    .required = true,
-	    .min_args = 1,
-	    .max_args = -1,
-	    .args = NULL,
-	},
-	{
-	    .short_name = "p",
-	    .long_name = "port",
-	    .required = false,
-	    .min_args = 1,
-	    .max_args = 1,
-	    .glued_arg = true,
-	    .args = NULL,
-	},
-	{ 0 }
+        ...,
+        {0}
     };
 
     char **still_argv = NULL;
@@ -114,6 +164,7 @@ main (int argc, char **argv)
     return (0);
 }
 ```
+I suggest you to use the macro to build the array that allow you to go from 150 lines of code to 40/50.
 
 ### Error handling
 You can know what kind of error make the parsing stop with this structure (some error are not extremly precise but at least you can find why by yourself ;) ):
