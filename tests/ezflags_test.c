@@ -13,7 +13,7 @@ main (int argc, char **argv)
 	// 1. Switch classique (BOOL)
 	EZ_FLAG_BOOL ('v', "verbose",
 	              "test descriptiontest descriptiontest descriptiontest "
-	              "description...",
+	              "description",
 	              "Test"),
 
 	// 2. Obligatoire avec 1 argument (FULL car requis)
@@ -21,14 +21,15 @@ main (int argc, char **argv)
 	              "Test", NULL),
 
 	// 3. Glued possible 1 argument (OPT)
-	EZ_FLAG_OPT ('p', "port", "test description", "TEST2", "NUMBER"),
+	EZ_FLAG_OPT ('p', "port", "test description", "TEST2", false,
+	             "NUMBER"),
 
 	// 4. Multi-arguments infinis (FULL)
 	EZ_FLAG_FULL ('f', "files", 1, -1, true, false, "test description",
 	              "Other", NULL),
 
 	// 5. Uniquement Long Flag (OPT)
-	EZ_FLAG_OPT (0, "license-key", "test description", NULL, "KEY"),
+	EZ_FLAG_OPT (0, "license-key", "test description", NULL, false, "KEY"),
 
 	// 6. Uniquement Short Flag (BOOL)
 	EZ_FLAG_BOOL ('X', NULL, "test description", NULL),

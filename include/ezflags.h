@@ -65,7 +65,7 @@ typedef enum e_status
       .glued_arg = false,                                                     \
       .required = false }
 
-#define EZ_FLAG_OPT(sh, lg, desc, cat, arg_t)                                 \
+#define EZ_FLAG_OPT(sh, lg, desc, cat, req, arg_t)                            \
     { .short_name = sh,                                                       \
       .long_name = lg,                                                        \
       .description = desc,                                                    \
@@ -74,7 +74,7 @@ typedef enum e_status
       .help_args = EZ_HELP_ARGS (arg_t),                                      \
       .help_category = cat,                                                   \
       .glued_arg = true,                                                      \
-      .required = false }
+      .required = req }
 
 #define EZ_FLAG_FULL(sh, lg, mini, maxi, glued, req, desc, cat, h_args)       \
     { .short_name = sh,                                                       \
