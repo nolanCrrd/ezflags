@@ -2,6 +2,7 @@
 #include "ezflags_internal.h"
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <strings.h>
 
@@ -90,6 +91,7 @@ print_help (flag_t flag_array[])
 			}
 		}
 	}
+    free (categories);
 }
 
 ezflag_status
