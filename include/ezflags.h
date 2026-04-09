@@ -4,10 +4,6 @@
 #include <stdbool.h>
 
 /*========================
- * Define
- * ======================== */
-
-/*========================
  * Typedef
  * ======================== */
 
@@ -50,6 +46,46 @@ typedef enum e_status
     ERROR,
 
 } ezflag_status;
+
+/*========================
+ * Define
+ * ======================== */
+
+#define EZ_HELP_ARGS(...)                                                     \
+    (char *[]) { __VA_ARGS__, NULL }
+
+#define EZ_FLAG_BOOL(sh, lg, desc, cat)                                       \
+    { .short_name = sh,                                                       \
+      .long_name = lg,                                                        \
+      .description = desc,                                                    \
+      .min_args = 0,                                                          \
+      .max_args = 0,                                                          \
+      .help_args = NULL,                                                      \
+      .help_category = cat,                                                   \
+      .glued_arg = false,                                                     \
+      .required = false }
+
+#define EZ_FLAG_OPT(sh, lg, desc, cat, arg_t)                                 \
+    { .short_name = sh,                                                       \
+      .long_name = lg,                                                        \
+      .description = desc,                                                    \
+      .min_args = 1,                                                          \
+      .max_args = 1,                                                          \
+      .help_args = EZ_HELP_ARGS (arg_t),                                      \
+      .help_category = cat,                                                   \
+      .glued_arg = true,                                                      \
+      .required = false }
+
+#define EZ_FLAG_FULL(sh, lg, mini, maxi, glued, req, desc, cat, h_args)       \
+    { .short_name = sh,                                                       \
+      .long_name = lg,                                                        \
+      .description = desc,                                                    \
+      .min_args = mini,                                                       \
+      .max_args = maxi,                                                       \
+      .help_args = h_args,                                                    \
+      .help_category = cat,                                                   \
+      .glued_arg = glued,                                                     \
+      .required = req }
 
 /*========================
  * Public functions

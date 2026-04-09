@@ -10,131 +10,43 @@ main (int argc, char **argv)
     (void)argc;
 
     flag_t flags[] = {
-	// 1. Le switch classique (booléen) - Pas d'argument
-	{
-	    .short_name = 'v',
-	    .long_name = "verbose",
-	    .required = false,
-	    .min_args = 0,
-	    .max_args = 0,
-	    .args = NULL,
-	    .description = "test descriptiontest descriptiontest "
-	                   "descriptiontest descriptiontest descriptiontest "
-	                   "descriptiontest description",
-	    .help_category = "Test",
-	},
+	// 1. Switch classique (BOOL)
+	EZ_FLAG_BOOL ('v', "verbose",
+	              "test descriptiontest descriptiontest descriptiontest "
+	              "description...",
+	              "Test"),
 
-	// 2. Obligatoire avec exactement 1 argument (--output file.txt)
-	{
-	    .short_name = 'o',
-	    .long_name = "output",
-	    .required = true,
-	    .min_args = 1,
-	    .max_args = 1,
-	    .args = NULL,
-	    .description = "test description",
-	    .help_category = "Test",
-	},
+	// 2. Obligatoire avec 1 argument (FULL car requis)
+	EZ_FLAG_FULL ('o', "output", 1, 1, false, true, "test description",
+	              "Test", NULL),
 
-	// 3. Glued possible (-p8080 ou --port=8080)
-	{
-	    .short_name = 'p',
-	    .long_name = "port",
-	    .required = false,
-	    .min_args = 1,
-	    .max_args = 1,
-	    .glued_arg = true,
-	    .args = NULL,
-	    .description = "test description",
-	    .help_category = "TEST2",
-	    .help_args = (char *[]){ "NUMBER", NULL },
-	},
+	// 3. Glued possible 1 argument (OPT)
+	EZ_FLAG_OPT ('p', "port", "test description", "TEST2", "NUMBER"),
 
-	// 4. Multi-arguments infinis ET Glued (-fmain.c util.c ...)
-	// Prend 'main.c' en collé, puis tout ce qui suit jusqu'au prochain
-	// flag.
-	{
-	    .short_name = 'f',
-	    .long_name = "files",
-	    .required = false,
-	    .min_args = 1,
-	    .max_args = -1,
-	    .glued_arg = true,
-	    .args = NULL,
-	    .description = "test description",
-	    .help_category = "Other",
-	},
+	// 4. Multi-arguments infinis (FULL)
+	EZ_FLAG_FULL ('f', "files", 1, -1, true, false, "test description",
+	              "Other", NULL),
 
-	// 5. Uniquement un Long Flag (pas de version courte possible)
-	{
-	    .short_name = 0,
-	    .long_name = "license-key",
-	    .required = false,
-	    .min_args = 1,
-	    .max_args = 1,
-	    .args = NULL,
-	    .description = "test description",
-	},
+	// 5. Uniquement Long Flag (OPT)
+	EZ_FLAG_OPT (0, "license-key", "test description", NULL, "KEY"),
 
-	// 6. Uniquement un Short Flag (pas de version longue)
-	{
-	    .short_name = 'X',
-	    .long_name = NULL,
-	    .required = false,
-	    .min_args = 0,
-	    .max_args = 0,
-	    .args = NULL,
-	    .description = "test description",
-	},
+	// 6. Uniquement Short Flag (BOOL)
+	EZ_FLAG_BOOL ('X', NULL, "test description", NULL),
 
-	// 7. Glued OBLIGATOIRE avec DEUX arguments (-c10 20)
-	// Ici, le '10' est collé et le '20' est le prochain argv.
-	{
-	    .short_name = 'c',
-	    .long_name = "coord",
-	    .required = true,
-	    .min_args = 2,
-	    .max_args = 2,
-	    .glued_arg = true,
-	    .args = NULL,
-	    .description = "test description",
-	},
+	// 7. Glued OBLIGATOIRE avec DEUX arguments (FULL)
+	EZ_FLAG_FULL ('c', "coord", 2, 2, true, true, "test description", NULL,
+	              EZ_HELP_ARGS ("X", "Y")),
 
-	// 8. Optionnel gourmand ET Glued (1 à 3 arguments)
-	// Exemple : -s800 600 32 (800 est collé, les autres suivent)
-	{
-	    .short_name = 's',
-	    .long_name = "sizes",
-	    .required = false,
-	    .min_args = 1,
-	    .max_args = 3,
-	    .glued_arg = true,
-	    .args = NULL,
-	    .description = "test description",
-	},
+	// 8. Optionnel gourmand 1 à 3 arguments (FULL)
+	EZ_FLAG_FULL ('s', "sizes", 1, 3, true, false, "test description",
+	              NULL, EZ_HELP_ARGS ("WIDTH", "HEIGHT", "DEPTH")),
 
-	// 9. Le flag de récursion (Switch classique)
-	{
-	    .short_name = 'R',
-	    .long_name = "Recursive",
-	    .required = false,
-	    .min_args = 0,
-	    .max_args = 0,
-	    .args = NULL,
-	    .description = "test description",
-	},
+	// 9. Flag de récursion (BOOL)
+	EZ_FLAG_BOOL ('R', "Recursive", "test description", NULL),
 
-	// 10. Test de Glued Multi-args "Lourd" (-rgb255 128 64)
-	{
-	    .short_name = 'c',
-	    .long_name = "color",
-	    .required = false,
-	    .min_args = 3,
-	    .max_args = 3,
-	    .glued_arg = true,
-	    .args = NULL,
-	    .description = "test description",
-	},
+	// 10. Glued Multi-args 3 paramètres (FULL)
+	EZ_FLAG_FULL ('C', "color", 3, 3, true, false, "test description",
+	              NULL, EZ_HELP_ARGS ("R", "G", "B")),
 
 	{ 0 } // Sentinelle
     };
