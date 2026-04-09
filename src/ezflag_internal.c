@@ -174,6 +174,7 @@ fill_flag (char *flag, arg_type flag_type, char **args, flag_t flag_array[])
     // find the equal index
     char *equal = strchr (flag, '=');
     int equal_position = -1;
+
     if (equal != NULL)
 	{
 	    equal_position = equal - flag;
@@ -214,7 +215,11 @@ fill_flag (char *flag, arg_type flag_type, char **args, flag_t flag_array[])
 	    filled_args += 1;
 	    if (flag_type == SHORT_FLAG_GROUP)
 		{
-		    to_skip = -1;
+		    // If its a group flag -s255 but 255 s is glued then all
+		    // flag afeter become args
+		    to_skip = -filled_args;
+		    // Notify the function before to skip other by passing the
+		    // filled arg as negative value
 		}
 	}
 
@@ -224,6 +229,7 @@ fill_flag (char *flag, arg_type flag_type, char **args, flag_t flag_array[])
 	                            .information = filled_args });
 	}
 
+    // flag is in middle of a short group and the flag wait an arg -> error
     if (flag_type == SHORT_FLAG_GROUP && flag_array[index].glued_arg == false
         && (flag_array[index].min_args > 0 || filled_args > 0))
 	{
@@ -265,12 +271,6 @@ parse_next_arg (char **args, flag_t flag_array[])
 		    fill_flag_result = fill_flag (&args[0][i + 1], type,
 		                                  args + 1, flag_array);
 
-		    if (fill_flag_result.information == -1)
-			{
-			    to_skip = 1;
-			    break;
-			}
-
 		    // Basic error that stop
 		    if (fill_flag_result.status == SYSTEM_ERROR
 		        || fill_flag_result.status == FLAG_ARGUMENT_NOT_FOUND
@@ -278,6 +278,14 @@ parse_next_arg (char **args, flag_t flag_array[])
 		               == FLAG_GROUP_INVALID_ARGUMENT)
 			{
 			    return (fill_flag_result);
+			}
+
+		    if (fill_flag_result.information < 0)
+			{
+			    // If filled_args negative then that a glued arg
+			    // that take all remaining char of the group
+			    to_skip = -fill_flag_result.information - 1;
+			    break;
 			}
 
 		    // Composed error that stop (ex: -Rz and z not found)

@@ -39,7 +39,7 @@ main (int argc, char **argv)
 	              EZ_HELP_ARGS ("X", "Y")),
 
 	// 8. Optionnel gourmand 1 à 3 arguments (FULL)
-	EZ_FLAG_FULL ('s', "sizes", 1, 3, true, false, "test description",
+	EZ_FLAG_FULL ('s', "sizes", 1, 4, true, false, "test description",
 	              NULL, EZ_HELP_ARGS ("WIDTH", "HEIGHT", "DEPTH")),
 
 	// 9. Flag de récursion (BOOL)
