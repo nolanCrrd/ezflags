@@ -158,6 +158,10 @@ fill_flag_args (flag_t *flag, char *flag_str, arg_type flag_type,
 		    int tmp = filled_args + 1;
 		    filled_args = fill_spaced_arg (flag, args, tmp);
 		    filled_args -= (tmp == 1);
+		    if (tmp == 0 && filled_args == 0)
+			{
+			    filled_args = -1;
+			}
 		}
 	}
     else
