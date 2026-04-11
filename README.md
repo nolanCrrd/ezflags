@@ -16,7 +16,7 @@ Like ls or other command you can have:
 command -l                          # short flag
 command -lR                         # short flag group
 command -l -R                       # spaced short flag
-command -recurse                    # long flag
+command --recurse                   # long flag
 command -n 5 file                   # argument for flag
 command -c10 20                     # glued short flag
 command --files=file1               # glued long flag
