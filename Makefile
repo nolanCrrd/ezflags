@@ -2,10 +2,8 @@ NAME    = libezflags.a
 CC      = cc
 CFLAGS  = -Wall -Wextra -Werror -I include/
 
-# 1. Utiliser 'find' au lieu de wildcard pour la récursivité
 SRCS    = $(shell find src -name "*.c")
 
-# 2. Transformer src/path/file.c en .build/path/file.o
 OBJS    = $(patsubst src/%.c, .build/%.o, $(SRCS))
 
 TEST_SRCS   = $(wildcard tests/*.c)
@@ -24,7 +22,6 @@ $(NAME): $(OBJS)
 
 # 3. Règle de compilation améliorée
 .build/%.o: src/%.c
-	@# Créer le sous-dossier nécessaire dans .build avant de compiler
 	@mkdir -p $(dir $@)
 	@printf "  CC  ->  $<\n"
 	@$(CC) $(CFLAGS) -c $< -o $@
