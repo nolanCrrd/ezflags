@@ -26,6 +26,9 @@ command --files=file1 file2 file3   # glued arg list
 That can be annoying to parse all of this, so use ezflags to enjoy it.
 
 ## Usage
+### Example
+Yiu can see en example of simple usage in my repository [github.com/nolancrrd/ft_ls](ft_ls).
+
 ### Flag structure
 ```c
 typedef struct s_flag
