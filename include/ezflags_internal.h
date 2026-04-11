@@ -30,7 +30,7 @@ typedef struct s_arg_result
 } arg_result_t;
 
 /*========================
- * Utils functions functions
+ * Utils parser functions functions
  * ======================== */
 
 /**
@@ -42,12 +42,6 @@ typedef struct s_arg_result
  * @return
  */
 int str_array_append (char *str, char ***array_ptr, int array_size);
-
-int get_longest_first_colums (flag_t flag_array[]);
-
-/*========================
- * Implementation functions
- * ======================== */
 
 /**
  * @brief Return the type of the given arg string
@@ -68,6 +62,30 @@ arg_type get_arg_type (char *arg);
  */
 int get_flag_index (char *flag, arg_type flag_type, flag_t flag_array[],
                     int equal_position);
+
+/**
+ * @brief tell if the error of this arg need to stop the parsing
+ *
+ * @param status the status to check
+ * @return 0 if not and 1 if yes
+ */
+int is_important_error (ezflag_status status);
+
+/*========================
+ * Checks functions
+ * ======================== */
+
+/**
+ * @brief Check if no arg required is not found
+ *
+ * @param flag_array FLags defined by the user
+ * @return 0 if ok and 1 if missing at least one flag
+ */
+int check_all_required (flag_t flag_array[]);
+
+/*========================
+ * Flag args filler functions
+ * ======================== */
 
 /**
  * @brief Fill all the arg of the flag with other args
@@ -105,6 +123,10 @@ int fill_glued_arg (flag_t *flag, arg_type flag_type, char *flag_str,
 int fill_flag_args (flag_t *flag, char *flag_str, arg_type flag_type,
                     int equal_position, char **args);
 
+/*========================
+ * Parser functions
+ * ======================== */
+
 /**
  * @brief Find and fill the correct flag according to the given string
  *
@@ -127,28 +149,24 @@ arg_result_t fill_flag (char *flag, arg_type flag_type, char **args,
 arg_result_t parse_next_arg (char **args, flag_t flag_array[]);
 
 /**
- * @brief Check if no arg required is not found
- *
- * @param flag_array FLags defined by the user
- * @return 0 if ok and 1 if missing at least one flag
- */
-int check_all_required (flag_t flag_array[]);
-
-/**
- * @brief tell if the error of this arg need to stop the parsing
- *
- * @param status the status to check
- * @return 0 if not and 1 if yes
- */
-int is_important_error (ezflag_status status);
-
-/**
  * @brief Fill the given buffer to match the --help syntax based on the flag
  *
  * @param flag reference flag the want to generate the help line
  * @param buf buffer to write in (must be allocated)
  */
 void fill_first_help_column (flag_t flag, char *buf);
+
+/*========================
+ * Display utils functions
+ * ======================== */
+
+/**
+ * @brief Return the siwe of the lqrgest first column (to align all other)
+ *
+ * @param flag_array list of flags defined by user
+ * @return size
+ */
+int get_longest_first_colums (flag_t flag_array[]);
 
 /**
  * @brief Find all unique categories in the array
