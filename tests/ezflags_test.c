@@ -59,13 +59,16 @@ main (int argc, char **argv)
 	}
 
     char **still_argv = NULL;
+    ezflag_status status = ezflags (argv, (flag_t *)&flags, &still_argv);
 
-    if (ezflags (argv, (flag_t *)&flags, &still_argv))
+    if (status)
 	{
-	    printf ("Error\n");
+	    printf ("%s\n", ez_strerror (status));
 	}
-
-    print_ezflags_result (flags, still_argv);
+    else
+	{
+	    print_ezflags_result (flags, still_argv);
+	}
 
     if (still_argv)
 	{

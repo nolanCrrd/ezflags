@@ -7,6 +7,31 @@
 #include <string.h>
 #include <strings.h>
 
+static const char *const error_messages[]
+    = { "Success",
+        "Internal: Not a flag",
+        "Internal: No more flags",
+        "A required flag is missing",
+        "Flag not found",
+        "Unknown flag in group",
+        "Invalid argument in flag group",
+        "Flag repeated",
+        "Flag missing its argument",
+        "This flag cannot be glued",
+        "Impossible flag format",
+        "System error (Memory allocation failed)",
+        "Unknown error" };
+
+const char *
+ez_strerror (ezflag_status status)
+{
+    if (status < 0 || status >= sizeof (error_messages) / sizeof (char *))
+	{
+	    return "Unknown error status";
+	}
+    return error_messages[status];
+}
+
 void
 print_help (flag_t flag_array[])
 {

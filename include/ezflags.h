@@ -132,4 +132,12 @@ void print_flag (flag_t flag);
  */
 void print_ezflags_result (flag_t flags[], char **still_argv);
 
+/**
+ * @brief Return the corresponding string associated to the status code
+ *
+ * @param status status code
+ * @return non allocated string
+ */
+const char *ez_strerror (ezflag_status status);
+
 #endif // EZFLAGS_H
