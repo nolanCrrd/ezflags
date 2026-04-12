@@ -9,7 +9,7 @@ fill_flag (char *flag, arg_type flag_type, char **args, flag_t flag_array[])
 {
     // find the equal index
     char *equal = strchr (flag, '=');
-    int equal_position = -1;
+    long int equal_position = -1;
 
     if (equal != NULL)
 	{
@@ -59,7 +59,7 @@ fill_flag (char *flag, arg_type flag_type, char **args, flag_t flag_array[])
 		}
 	}
 
-    if (filled_args < flag_array[index].min_args)
+    if (filled_args < (int)flag_array[index].min_args)
 	{
 	    return ((arg_result_t){ .status = FLAG_ARGUMENT_NOT_FOUND,
 	                            .information = filled_args });

@@ -1,11 +1,14 @@
 #include "ezflags.h"
 #include "ezflags_internal.h"
+#include <stddef.h>
 
-int
-fill_spaced_arg (flag_t *flag, char **args, int size)
+size_t
+fill_spaced_arg (flag_t *flag, char **args, size_t size)
 {
     int j = 0;
-    while (args[j] && (flag->max_args == -1 || size + j < flag->max_args))
+    while (
+        args[j]
+        && (flag->max_args == -1 || size + (size_t)j < (size_t)flag->max_args))
 	{
 	    // if other args are a flag then stop
 	    if (get_arg_type (args[j]) != ARGUMENT)
@@ -13,15 +16,15 @@ fill_spaced_arg (flag_t *flag, char **args, int size)
 		    break;
 		}
 
-	    str_array_append (args[j], &flag->args, size + j);
+	    str_array_append (args[j], &flag->args, size + (size_t)j);
 	    ++j;
 	}
-    return (size + j);
+    return (size + (size_t)j);
 }
 
 int
 fill_glued_arg (flag_t *flag, arg_type flag_type, char *flag_str,
-                int equal_position)
+                long int equal_position)
 {
     if (flag_type == LONG_FLAG)
 	{
@@ -46,7 +49,7 @@ fill_glued_arg (flag_t *flag, arg_type flag_type, char *flag_str,
 
 int
 fill_flag_args (flag_t *flag, char *flag_str, arg_type flag_type,
-                int equal_position, char **args)
+                long int equal_position, char **args)
 {
     int filled_args = 0;
     if (flag->glued_arg)
@@ -55,8 +58,8 @@ fill_flag_args (flag_t *flag, char *flag_str, arg_type flag_type,
 	                                  equal_position + 1);
 	    if (filled_args + 1 < flag->max_args || flag->max_args == -1)
 		{
-		    int tmp = filled_args + 1;
-		    filled_args = fill_spaced_arg (flag, args, tmp);
+		    size_t tmp = (size_t)filled_args + 1;
+		    filled_args = (int)fill_spaced_arg (flag, args, tmp);
 		    filled_args -= (tmp == 1);
 		    if (tmp == 0 && filled_args == 0)
 			{
@@ -66,7 +69,7 @@ fill_flag_args (flag_t *flag, char *flag_str, arg_type flag_type,
 	}
     else
 	{
-	    filled_args = fill_spaced_arg (flag, args, 0);
+	    filled_args = (int)fill_spaced_arg (flag, args, 0);
 	}
 
     return (filled_args);

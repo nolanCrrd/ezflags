@@ -25,6 +25,10 @@ command --files=file1 file2 file3   # glued arg list
 
 That can be annoying to parse all of this, so use ezflags to enjoy it.
 
+## To build
+To use the librairy in your project you just have to go clone it, go into the folder and run make, that will create an archive
+that you can use in your link command. You will find all the user function in the include folder.
+
 ## Usage
 ### Example
 Yiu can see en example of simple usage in my repository [github.com/nolancrrd/ft_ls](ft_ls).

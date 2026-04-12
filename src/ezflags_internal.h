@@ -2,6 +2,7 @@
 #define EZFLAG_INTERNAL_H
 
 #include "ezflags.h"
+#include <stddef.h>
 
 /*========================
  * Define
@@ -41,7 +42,7 @@ typedef struct s_arg_result
  * @param array_size current size of the array
  * @return
  */
-int str_array_append (char *str, char ***array_ptr, int array_size);
+int str_array_append (char *str, char ***array_ptr, size_t array_size);
 
 /**
  * @brief Return the type of the given arg string
@@ -61,7 +62,7 @@ arg_type get_arg_type (char *arg);
  * @return index of the flag / -1 if not found
  */
 int get_flag_index (char *flag, arg_type flag_type, flag_t flag_array[],
-                    int equal_position);
+                    long int equal_position);
 
 /**
  * @brief tell if the error of this arg need to stop the parsing
@@ -95,7 +96,7 @@ int check_all_required (flag_t flag_array[]);
  * @param size size of flag's params (if already filled with things)
  * @return number of filled args
  */
-int fill_spaced_arg (flag_t *flag, char **args, int size);
+size_t fill_spaced_arg (flag_t *flag, char **args, size_t size);
 
 /**
  * @brief Fill argument starting by the glued one (-Iinclude or
@@ -108,7 +109,7 @@ int fill_spaced_arg (flag_t *flag, char **args, int size);
  * @return number of filled args (0 for one and -1 for 0)
  */
 int fill_glued_arg (flag_t *flag, arg_type flag_type, char *flag_str,
-                    int equal_position);
+                    long int equal_position);
 
 /**
  * @brief Fill all argument of the flag independant of glued or not
@@ -121,7 +122,7 @@ int fill_glued_arg (flag_t *flag, arg_type flag_type, char *flag_str,
  * @return number of filled args (sum of glued and spaced)
  */
 int fill_flag_args (flag_t *flag, char *flag_str, arg_type flag_type,
-                    int equal_position, char **args);
+                    long int equal_position, char **args);
 
 /*========================
  * Parser functions
@@ -166,7 +167,7 @@ void fill_first_help_column (flag_t flag, char *buf);
  * @param flag_array list of flags defined by user
  * @return size
  */
-int get_longest_first_colums (flag_t flag_array[]);
+size_t get_longest_first_colums (flag_t flag_array[]);
 
 /**
  * @brief Find all unique categories in the array
@@ -174,6 +175,6 @@ int get_longest_first_colums (flag_t flag_array[]);
  * @param flag_array flag where find categories
  * @return allocated array
  */
-char **get_categories (flag_t flag_array[]);
+const char **get_categories (flag_t flag_array[]);
 
 #endif // EZFLAG_INTERNAL_H

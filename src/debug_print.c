@@ -10,8 +10,8 @@ print_flag (flag_t flag)
     printf ("\tfound: %i\n", flag.found);
     printf ("\trequired: %i\n", flag.required);
 
-    printf ("\tmin_args: %i\n", flag.min_args);
-    printf ("\tmax_args: %i\n", flag.max_args);
+    printf ("\tmin_args: %lu\n", flag.min_args);
+    printf ("\tmax_args: %ld\n", flag.max_args);
     printf ("\tglued_param: %i\n", flag.glued_arg);
 
     if (flag.args)

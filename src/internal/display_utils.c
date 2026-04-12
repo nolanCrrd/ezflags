@@ -1,14 +1,15 @@
 #include "ezflags.h"
 #include "ezflags_internal.h"
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-int
+size_t
 get_longest_first_colums (flag_t flag_array[])
 {
-    int max_size = 0;
-    int size;
+    size_t max_size = 0;
+    size_t size;
 
     for (int i = 0; flag_array[i].short_name || flag_array[i].long_name; ++i)
 	{
@@ -63,7 +64,7 @@ fill_first_help_column (flag_t flag, char *buf)
 
     if (flag.help_args)
 	{
-	    for (int j = 0; flag.help_args[j]; ++j)
+	    for (size_t j = 0; flag.help_args[j]; ++j)
 		{
 		    if (j < flag.min_args)
 			{
@@ -79,15 +80,15 @@ fill_first_help_column (flag_t flag, char *buf)
     buf[n] = 0;
 }
 
-char **
+const char **
 get_categories (flag_t flag_array[])
 {
-    char **categories;
-    int nb_cat = 1;
+    const char **categories;
+    size_t nb_cat = 1;
 
     // init categories
     categories = malloc (sizeof (char *) * 2);
-    categories[0] = "Other";
+    categories[0] = "Generals Options";
     categories[1] = 0;
 
     for (int i = 0; flag_array[i].short_name || flag_array[i].long_name; ++i)

@@ -2,6 +2,7 @@
 #define EZFLAGS_H
 
 #include <stdbool.h>
+#include <stddef.h>
 #include <unistd.h>
 
 /*========================
@@ -13,8 +14,8 @@ typedef struct s_flag
     char short_name;
     char *long_name;
 
-    int min_args;
-    int max_args;
+    size_t min_args;
+    long max_args;
     char **args;
 
     bool glued_arg;

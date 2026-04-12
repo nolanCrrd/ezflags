@@ -1,6 +1,7 @@
 #include "ezflags.h"
 #include "ezflags_internal.h"
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,8 +10,8 @@
 void
 print_help (flag_t flag_array[])
 {
-    int first_col_size = get_longest_first_colums (flag_array);
-    char **categories = get_categories (flag_array);
+    size_t first_col_size = get_longest_first_colums (flag_array);
+    const char **categories = get_categories (flag_array);
 
     // Print per category
     for (int i = 0; categories[i]; ++i)
@@ -42,18 +43,19 @@ print_help (flag_t flag_array[])
 			    fill_first_help_column (flag_array[j], column);
 
 			    // Print first column
-			    printf ("%-*s\t", first_col_size, column);
+			    printf ("%-*s\t", (int)first_col_size, column);
 
 			    if (flag_array[j].description)
 				{
-				    int max_desc_width
-				        = MAX_WIDTH - first_col_size - 1;
+				    size_t max_desc_width = (size_t)MAX_WIDTH
+				                            - first_col_size
+				                            - 1;
 
 				    char *desc = flag_array[j].description;
 
 				    while (desc && *desc)
 					{
-					    int len = strlen (desc);
+					    size_t len = strlen (desc);
 
 					    if (len < max_desc_width)
 						{
@@ -63,7 +65,7 @@ print_help (flag_t flag_array[])
 
 					    // Find the break point to match
 					    // max_width
-					    int break_at = max_desc_width;
+					    size_t break_at = max_desc_width;
 					    while (break_at > 0
 					           && desc[break_at] != ' ')
 						{
@@ -75,10 +77,11 @@ print_help (flag_t flag_array[])
 						    break_at = max_desc_width;
 						}
 
-					    printf ("%.*s\n", break_at, desc);
+					    printf ("%.*s\n", (int)break_at,
+					            desc);
 
-					    printf ("%*s\t ", first_col_size,
-					            "");
+					    printf ("%*s\t ",
+					            (int)first_col_size, "");
 
 					    // Skip whitespaces at beginning
 					    desc += break_at;
@@ -97,7 +100,7 @@ print_help (flag_t flag_array[])
 ezflag_status
 ezflags (char **args, flag_t flag_array[], char ***still_argv)
 {
-    int still_args_found = false;
+    size_t still_args_found = 0;
 
     while (args[0])
 	{

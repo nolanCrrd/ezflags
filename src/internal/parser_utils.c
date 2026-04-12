@@ -1,10 +1,11 @@
 #include "ezflags.h"
 #include "ezflags_internal.h"
+#include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
 
 int
-str_array_append (char *str, char ***array_ptr, int array_size)
+str_array_append (char *str, char ***array_ptr, size_t array_size)
 {
     *array_ptr = realloc (*array_ptr, sizeof (char *) * (array_size + 2));
     if (!(*array_ptr))
@@ -70,7 +71,7 @@ get_arg_type (char *arg)
 
 int
 get_flag_index (char *flag, arg_type flag_type, flag_t flag_array[],
-                int equal_position)
+                long int equal_position)
 {
     if (flag_type == SHORT_FLAG || flag_type == SHORT_FLAG_GROUP)
 	{
@@ -95,7 +96,7 @@ get_flag_index (char *flag, arg_type flag_type, flag_t flag_array[],
 			    // If equal found then compare without it
 			    if (equal_position != -1
 			        && strncmp (flag, flag_array[i].long_name,
-			                    equal_position)
+			                    (size_t)equal_position)
 			               == 0)
 				{
 				    return (i);
