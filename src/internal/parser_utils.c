@@ -7,15 +7,13 @@
 int
 str_array_append (char *str, char ***array_ptr, size_t array_size)
 {
-    *array_ptr = realloc (*array_ptr, sizeof (char *) * (array_size + 2));
-    if (!(*array_ptr))
-	{
-	    return (1);
-	}
+    char **tmp = realloc(*array_ptr, sizeof(char *) * (array_size + 2));
+    if (!tmp)
+        return (-1);
 
-    (*array_ptr)[array_size] = str;
-    (*array_ptr)[array_size + 1] = NULL;
-
+    tmp[array_size] = str;
+    tmp[array_size + 1] = NULL;
+    *array_ptr = tmp;
     return (0);
 }
 
