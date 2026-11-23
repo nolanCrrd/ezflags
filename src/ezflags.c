@@ -53,13 +53,13 @@ print_help (flag_t flag_array[])
 		{
 		    // To avoid segfault need to treat NULL in another way
 		    if (flag_array[j].help_category == NULL
-		        && strcmp (categories[i], "Other") != 0)
+		        && strcmp (categories[i], "Generals Options") != 0)
 			{
 			    continue;
 			}
 
 		    if ((flag_array[j].help_category == NULL
-		         && strcmp (categories[i], "Other") == 0)
+		         && strcmp (categories[i], "Generals Options") == 0)
 		        || strcmp (categories[i], flag_array[j].help_category)
 		               == 0)
 			{

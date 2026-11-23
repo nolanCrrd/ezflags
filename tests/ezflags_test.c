@@ -8,6 +8,7 @@ int
 main (int argc, char **argv)
 {
     (void)argc;
+	
 
     flag_t flags[] = {
 	// 1. Switch classique (BOOL)
